@@ -1,0 +1,13 @@
+{
+    "train_csv": "datasets/L_shape/train.csv",
+    "val_csv": "datasets/L_shape/val.csv",
+    "test_csv": "datasets/L_shape/test.csv",
+    "base_dir": "datasets/L_shape",
+    "model_path": "outputs/best_L_shape_model.pth",
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 1e-3,
+    "input_dim": 21,
+    "embed_dim": 128,
+    "num_layers": 3
+}

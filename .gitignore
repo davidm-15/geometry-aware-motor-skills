@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Data and outputs (too large for git)
+datasets/
+outputs/
+wandb/
+*.pth
+*.pt
+*.ckpt
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
