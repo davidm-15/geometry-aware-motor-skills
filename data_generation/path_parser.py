@@ -2,8 +2,6 @@ import numpy as np
 from pathlib import Path
 from utils.math_utils import euler_to_quaternion
 
-# python -m data_generation.path_parser
-
 def get_segments(positions, slice_size=7, threshold=0.005):
     if len(positions) < slice_size:
         return ['straight'] * len(positions)
@@ -47,8 +45,6 @@ def parse_trajectory_file(file_path):
         eulers = stroke_data[:, 3:6]
         quats = euler_to_quaternion(eulers)
         
-        # Determine segments by curvature (simple heuristic)
-        # Using a sliding window to identify straight vs corner
         segments = get_segments(positions)
         
         subpaths.append({

@@ -2,6 +2,7 @@ import random
 import math
 import numpy as np
 from abc import ABC, abstractmethod
+from scipy.spatial.transform import Rotation as R
 
 class Rule(ABC):
     @property
@@ -85,7 +86,6 @@ class SpatialPositionRule(Rule):
 class SpatialOrientationRule(Rule):
     """Applies a continuous rotational offset to the target pose."""
     def __init__(self, target_segment, rotvec):
-        from scipy.spatial.transform import Rotation as R
         self.target_segment = target_segment
         self.rot_offset = R.from_rotvec(rotvec, degrees=False)
         
@@ -95,16 +95,11 @@ class SpatialOrientationRule(Rule):
         
     def modify_target(self, target_pos, target_quat, segment_type):
         if segment_type == self.target_segment or self.target_segment == 'any':
-            # print(f"Applying orientation offset {self.rot_offset.as_rotvec()} to segment '{segment_type}'")
-            from scipy.spatial.transform import Rotation as R
             r_target = R.from_quat(target_quat)
-            # Combine rotations (apply offset)
             r_modified = self.rot_offset * r_target
-            # print(f"Original quat: {target_quat}, Modified quat: {r_modified.as_quat()}")
             return target_pos, r_modified.as_quat()
 
         return target_pos, target_quat
-
 
 
 def apply_rules_max_wins(rules, pos, quat, f_ctrl, tau_ctrl, segment_type, proximity_data):

@@ -1,7 +1,5 @@
 import numpy as np
 
-# python -m utils.quaternions
-
 
 def get_angular_distances(quaternions: np.ndarray) -> np.ndarray:
     """

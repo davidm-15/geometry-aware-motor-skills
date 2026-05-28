@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 from scipy.spatial.transform import Rotation
-
-# python -m utils.visualization
 
 def plot_trajectory(trajectory: np.ndarray) -> None:
     """
@@ -180,22 +177,3 @@ if __name__ == "__main__":
     jerk = np.diff(accleration, prepend=0)
     
     plot_jerk_acceleration_speed(np.hstack((jerk.reshape(-1, 1), accleration.reshape(-1, 1), trajectory[:, 8].reshape(-1, 1))))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # continuos = load_robotwin_trajectory("datasets/RoboTeach/CSV_12_09_45_01.csv")
-    # p2p = load_robotwin_trajectory("datasets/RoboTeach/CSV_12_09_45.csv")
-
-    # plot_continuous_p2p(continuos[:, 1:8], p2p[:, 1:8])

@@ -21,8 +21,6 @@ import os
 import random
 import argparse
 
-# python -m data_generation.generate_L_samples
-
 
 def generate_samples(
     source_dir: str = "datasets/L_shape/00_source",

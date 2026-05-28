@@ -7,11 +7,6 @@ import argparse
 import os
 
 
-# python3 -m measurements.window_inspector <input_obj> --cardboard 50.0 --thickness 3.0 --output blueprint.png --output-obj cardboard_model.obj
-# python3 -m measurements.window_inspector datasets/windows-v2/87_wr1fr_1/87_wr1fr_1.obj --cardboard 59 30 --thickness 0.6 --output measurements/window_87.png --output-obj measurements/window_87.obj
-
-
-# 71 51.5
 def measure_and_visualize_window(obj_path, cardboard_sides=None, thickness=None, output_path=None, output_obj=None):
     # 1. Load the 3D model
     print(f"Loading {obj_path}...")
@@ -183,7 +178,7 @@ def measure_and_visualize_window(obj_path, cardboard_sides=None, thickness=None,
                 bbox=dict(facecolor='white', edgecolor='none', alpha=0.8, pad=1))
 
     # 7c. Summary Text
-    display_thickness = thickness if thickness is not None else depth_final
+    display_thickness = thickness if thickness is not None else depth_raw
     summary_text = (f"CARDBOARD THICKNESS: {display_thickness:.4f}\n"
                     f"SCALE: {scale:.4f}\n"
                     f"CARDBOARD SIDES: {cardboard_sides if cardboard_sides else 'N/A'}")

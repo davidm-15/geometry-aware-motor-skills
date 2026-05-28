@@ -3,18 +3,12 @@ import numpy as np
 from pathlib import Path
 from typing import Union
 from scipy.spatial.transform import Rotation as R
-import matplotlib.pyplot as plt
-from utils.visualization import plot_trajectory, plot_velocity, plot_jerk_acceleration_speed
-from utils.quaternions import get_angular_distances
 from more_itertools import sliding_window
 from data_generation.simulation import VirtualEndEffector
-import csv
-import shutil
-from data_generation.rules import HumanNoiseRule, VelocityScalingRule, SpatialPositionRule, SpatialOrientationRule, apply_rules_max_wins
+from data_generation.rules import VelocityScalingRule, SpatialPositionRule, SpatialOrientationRule, apply_rules_max_wins
 from data_generation.skeleton_converter import WindowSkeletonConverter
 import trimesh
 import os
-# python -m data_generation.load_data
 
 def load_path(file_path: Union[str, Path]) -> np.ndarray:
     """
@@ -86,7 +80,6 @@ def convert_path_2_trajectory(
 
     all_velocities = []
     all_time_steps = []
-    all_f_ctrls = []
 
     all_out_positions = []
     all_out_quats = []
@@ -114,10 +107,6 @@ def convert_path_2_trajectory(
         if n_points == 1:
             continue
 
-        segment_vectors = np.diff(positions, axis=0)
-        segment_lengths = np.linalg.norm(segment_vectors, axis=1)
-        nonzero_lengths = segment_lengths[segment_lengths > eps]
-
         simulator = VirtualEndEffector(
             m=mass, 
             I=I_matrix, 
@@ -135,14 +124,7 @@ def convert_path_2_trajectory(
         current_speed = 0.0
         max_steps = n_points * 50
 
-        # Progress reporting setup
-        report_interval = 2500
-        next_report_point = report_interval
-
         velocities = [np.linalg.norm(simulator.v.copy())]
-        positions_all = [positions[0].copy()]
-        f_ctrls = [0.0]
-        tau_ctrls = [0.0]
         out_positions = [simulator.p.copy()]
         out_quats = [simulator.q.copy()]
         ids = [stroke_idx]
@@ -170,9 +152,6 @@ def convert_path_2_trajectory(
             )
 
             velocities.append(np.linalg.norm(simulator.v.copy()))
-            positions_all.append(simulator.p.copy())
-            f_ctrls.append(f_ctrl)
-            tau_ctrls.append(tau_ctrl)
             out_positions.append(simulator.p.copy())
             out_quats.append(simulator.q.copy())
             ids.append(stroke_idx)
@@ -225,7 +204,6 @@ def convert_path_2_trajectory(
 
         all_velocities.append(vel_r)
         all_time_steps.append(time_r)
-        all_f_ctrls.append(f_ctrls)
         all_out_positions.append(pos_r)
         all_out_quats.append(quat_r)
         all_ids.append(ids_r)
@@ -234,7 +212,7 @@ def convert_path_2_trajectory(
     all_velocities = np.concatenate(all_velocities, axis=0)
     all_time_steps = np.concatenate(all_time_steps, axis=0)
     out_positions = np.concatenate(all_out_positions, axis=0)
-    out_quats = np.concatenate(all_out_quats, axis=0);
+    out_quats = np.concatenate(all_out_quats, axis=0)
     all_ids = np.concatenate(all_ids, axis=0)
 
     all_velocities = all_velocities.reshape(-1, 1)
@@ -246,19 +224,6 @@ def convert_path_2_trajectory(
 
     return data
     
-
-def load_path_as_trajectory(file_path: Union[str, Path], v_base: float = 0.5, a_base: float = 1) -> np.ndarray:
-    """
-    Loads data from MaskPlanner format csv file (X, Y, Z, A, B, C, index) and converts it to RoboTwin format
-    (time(s),x,y,z,qx,qy,qz,qw,velocity,ID)
-    """
-    data = load_path(file_path)
-
-    
-    trajectory = convert_path_2_trajectory(data, v_base=v_base, a_base=a_base)
-    return trajectory
-
-
 
 def load_robotwin_trajectory(file_path: Union[str, Path]) -> np.ndarray:
     """

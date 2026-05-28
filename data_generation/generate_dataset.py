@@ -79,23 +79,16 @@ def _assign_segments_by_position(raw_data: np.ndarray, segments: list, traj_data
             result[global_i] = orig_segs[nn_idx[k]]
     return result
 
-# python -m data_generation.generate_dataset
 
-
-# ── Rule samplers ─────────────────────────────────────────────────────────────;
+# ── Rule samplers ─────────────────────────────────────────────────────────────
 
 def sample_velocity_scaling_rule(is_ood):
-    # vel_scale_range = random.choice([(0.4, 0.7), (1.3, 1.8)]) if is_ood else random.choice([(0.7, 0.8)])
     vel_scale_range = random.choice([(0.1, 0.9), (1.1, 3.0)])
     f_scale_val = 1.0
-    only_seg = False
     rule = None
     if random.random() > 0.33:
         f_scale_val = np.random.uniform(*vel_scale_range)
-        if only_seg:
-            seg = "straight"
-        else:
-            seg = random.choice(['straight', 'corner'])
+        seg = random.choice(['straight', 'corner'])
         rule = VelocityScalingRule(seg, f_scale=f_scale_val, tau_scale=f_scale_val)
         geom = seg
     else:
@@ -120,8 +113,6 @@ def sample_spatial_position_rule(is_ood):
 def sample_spatial_orientation_rule(is_ood):
     ori_x_val = 0.0
     rule = None
-    ori_scale_range = random.choice([(-0.2, -0.1), (0.2, 0.3)]) if is_ood else random.choice([(-0.3, -0.2), (0.1, 0.2)])
-    # ori_scale_range = random.choice([(-0.3, -0.2), (0.1, 0.2)]) if is_ood else random.choice([(-0.3, -0.2), (0.1, 0.2)])
     ori_scale_range = random.choice(((-0.5, -0.1), (0.1, 0.5)))
     if random.random() > 0.5:
         ori_x_val = np.random.uniform(*ori_scale_range)

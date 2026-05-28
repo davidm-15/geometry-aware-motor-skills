@@ -118,8 +118,6 @@ class WindowSkeletonConverter:
         Merges nodes that are closer than threshold and simplifies edges.
         This collapses the 2x2 or 2x1 grid points at crossings into single points.
         """
-        from scipy.spatial import KDTree
-        
         if not nodes:
             return [], []
             
@@ -304,7 +302,7 @@ def main():
     input_path = Path(args.input)
     if input_path.is_file():
         # Process single file
-        skeleton = converter.extract_skeleton(str(input_path))
+        skeleton = converter.extract_skeleton_from_file(str(input_path))
         sample_name = input_path.stem
         
         # Save JSON

@@ -6,9 +6,8 @@ import random
 
 from data_generation.path_parser import parse_trajectory_file
 from data_generation.simulation import VirtualEndEffector
-from data_generation.rules import VelocityScalingRule, SpatialPositionRule, SpatialOrientationRule
+from data_generation.rules import VelocityScalingRule, SpatialPositionRule, SpatialOrientationRule, GeometryProximityRule
 
-# python -m data_generation.generator
 
 def simulate_stroke(window_id, stroke_subpath, is_ood, dt=0.01):
     """
@@ -46,8 +45,6 @@ def simulate_stroke(window_id, stroke_subpath, is_ood, dt=0.01):
     edge_nodes = np.array(edge_nodes) if edge_nodes else None
     crossing_nodes = np.array(crossing_nodes) if crossing_nodes else None
 
-    from data_generation.rules import GeometryProximityRule
-    
     # Define ranges based on In-Distribution (ID) vs Out-Of-Distribution (OOD)
     if not is_ood:
         vel_scale_range = (0.8, 1.2)

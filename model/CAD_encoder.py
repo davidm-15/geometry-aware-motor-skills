@@ -3,8 +3,6 @@ import torch.nn.functional as F
 from .pointnet_util import PointNetSetAbstraction
 
 
-# python -m model.CAD_encoder
-
 class CADEncoder(nn.Module):
     """
     PointNet++ SSG-style encoder.

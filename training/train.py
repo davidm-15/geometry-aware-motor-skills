@@ -9,11 +9,6 @@ from model.fusion_model import FusionModel
 from training.dataset import FusionDataset, ACTIVE_RULES, CLASS_NAMES, RULE_CLASS_NAMES
 from training.evaluate import evaluate, plot_confusion_matrix, plot_scatter_plot
 
-# python -m training.train
-# python -m training.train --eval-only
-# python -m training.train --dataset-path datasets/windows-v2 --output-dir outputs/windows_v2_fusion_test
-# python -m training.train --dataset-path datasets/window_cross --output-dir outputs/window_cross_fusion_test
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -251,7 +246,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--output-dir", type=str, default="outputs/L_shape_fusion_test")
     parser.add_argument("--dataset-path", type=str, default="datasets/L_shape", help="Path to dataset root containing train.csv, val.csv, test.csv, and CAD OBJ files.")
-    parser.add_argument("--headless", action="store_false", help="Run in headless mode (no plots shown, only saved)")
+    parser.add_argument("--headless", action="store_true", help="Run in headless mode (no plots shown, only saved)")
     parser.add_argument("--eval-only", action="store_true", help="Only evaluate on test set using saved checkpoint")
 
     args = parser.parse_args()
